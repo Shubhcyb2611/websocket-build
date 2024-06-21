@@ -1,13 +1,13 @@
 import express from "express";
 import http from "http";
-import { WebSocket } from "ws";
+import { Server } from "socket.io";
 import path from "path";
 
 const app = express();
 
 const port = 8080;
-
 const server = http.createServer(app);
+const io = new Server(server);
 
 app.use(express.static(path.resolve("../client")));
 
