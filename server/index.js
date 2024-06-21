@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
 import { WebSocket } from "ws";
+import path from "path";
 
 const app = express();
 
@@ -8,16 +9,11 @@ const port = 8080;
 
 const server = http.createServer(app);
 
-app.use(express.static("/client"));
+app.use(express.static(path.resolve("../client")));
 
-server.listen(posrt, () => {
+app.get("/", (req, res) => {
+  return res.sendFile("../client/index.html");
+});
+server.listen(port, () => {
   console.log("server is listening");
 });
-const wss = new WebSocket("ws://localhost:8080/");
-
-// wss.on("open", (ws) => {
-//   ws.on("message", (data) => {
-//     console.log("data from server : ", data);
-//     ws.send("thanks dear !!");
-//   });
-// });
