@@ -1,23 +1,23 @@
 import express from "express";
-import http from "http";
+import { createServer } from "node:http";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 import { Server } from "socket.io";
-import path from "path";
 
 const app = express();
-
-const port = 8080;
-const server = http.createServer(app);
+const server = createServer(app);
 const io = new Server(server);
 
-io.on("connection", (socket) => {
-  console.log("A new user has been added", socket.id);
-});
-
-app.use(express.static(path.resolve("../client")));
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 app.get("/", (req, res) => {
-  return res.sendFile("../client/index.html");
+  res.sendFile(join(__dirname, "/public/index.html"));
 });
-server.listen(port, () => {
-  console.log("server is listening");
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+});
+
+server.listen(3000, () => {
+  console.log("server running at http://localhost:3000");
 });
